@@ -45,7 +45,7 @@ input {
 }
 
 
-.productClasses {
+.product {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -53,7 +53,7 @@ input {
     width: 100%;
     flex-shrink: 2;
 }
-.productClasses span {
+.product span {
     padding: 30px 30px;
 }
 .deleteButton {

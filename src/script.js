@@ -23,21 +23,21 @@ let productObj = {
     product : addProduct.value,
     price : addPrice.value,
     year : addYear.value,
-    id : Math.floor(Math.random() * 100),
+    id : createUUID(),
 }
 products.push(productObj);
 console.log(products);
 //prices total
 prices.push(productObj.price);
 console.log(prices);
-let priceSum = prices.reduce((previousValue, currentValue) => { 
-  return parseFloat(previousValue) + parseFloat(currentValue) });
+let priceSum = prices.reduce((total, product) => { 
+  return parseFloat(total) + parseFloat(product)});
 console.log(priceSum);
 //to HTML
 document.querySelector('form').reset();
-productSection.insertAdjacentHTML("beforeend", createProductHTML(productObj));
+//productSection.insertAdjacentHTML("beforeend", createProductHTML(productObj));
 total.innerHTML = priceSum;
-
+updateProductView(); 
 //const mapProduct = products.map(product => createProductHTML(product));
 //productSection.innerHTML = mapProduct.join('');
 //const productDiv = document.createElement('div'); 
@@ -47,16 +47,17 @@ total.innerHTML = priceSum;
 
 
 const createProductHTML =(product)=>{
-
-return `<div id=${create_UUID()} class='productClasses'>
-         <span id="product1"><b>Product:</b>${product.product}</span> 
-         <span id="product2"><b>Price:</b>${product.price}</span>
-         <span id="product3"><b>Year:</b>${product.year}</b></span>
-         <button onclick='removeProduct(${product.id})' class="deleteButton" type="button">Delete</button>
+return `<div class='product'>
+         <span class='product-name'><b>Product:</b>${product.product}</span> 
+         <span class='product-price'><b>Price:</b>${product.price}</span>
+         <span class='product-year'><b>Year:</b>${product.year}</b></span>
+         <button onclick='removeProduct("${product.id}")' class="deleteButton" type="button">Delete</button>
        </div>`;
 }
 
-function create_UUID(){
+
+
+function createUUID(){
   var dt = new Date().getTime();
   var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
       var r = (dt + Math.random()*16)%16 | 0;
@@ -65,14 +66,6 @@ function create_UUID(){
   });
   return uuid;
 }
-function removeProduct(itemId, products) {
-  // find the index of the todo with the id you are looking for
-  const indexOfProductToDelete = products.findIndex((productInArray) => productInArray.id === itemId);
-  // remove that todo:
-  products.splice(indexOfProductToDelete, 1) // delete the todo
-} 
-
-console.log(create_UUID());
 
 /*function removeNode() {
   const myDiv = document.getElementById("productId");
@@ -82,7 +75,22 @@ console.log(create_UUID());
 
 document.addEventListener('submit', addProductObject);
 
+function removeProduct(id){
+  //remove product from product array
+  products = products.filter(product => product.id !== id);
+  updateProductView();
+}
 
+function updateProductView(){
+   //update total
+   //remove children from results section
+   productSection.innerHTML = '';
+   //add products back to results section
+   products.forEach(product => { 
+    productSection.insertAdjacentHTML("beforeend", createProductHTML(product) );
+   })
+   //create HTML*
+}
 
 
 
