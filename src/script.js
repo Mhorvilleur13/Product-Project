@@ -17,7 +17,6 @@ let prices = [];
 const addProductObject = (ev) => {
   ev.preventDefault();
   productSection.style.visibility = "visible";
-  //product Object
   let productObj = {
     product: addProduct.value,
     price: addPrice.value,
@@ -25,24 +24,13 @@ const addProductObject = (ev) => {
     id: createUUID(),
   };
   products.push(productObj);
-  console.log(products);
-  //prices total
   prices.push(productObj.price);
-  console.log(prices);
   let priceSum = prices.reduce((total, product) => {
     return parseFloat(total) + parseFloat(product);
   });
-  console.log(priceSum);
-  //to HTML
   document.querySelector("form").reset();
-  //productSection.insertAdjacentHTML("beforeend", createProductHTML(productObj));
   total.innerHTML = priceSum;
   updateProductView();
-  //const mapProduct = products.map(product => createProductHTML(product));
-  //productSection.innerHTML = mapProduct.join('');
-  //const productDiv = document.createElement('div');
-  //productDiv.innerHTML = createProductHTML(productObj);
-  //productSection.append(productDiv);
 };
 
 const createProductHTML = (product) => {
@@ -67,12 +55,6 @@ function createUUID() {
   return uuid;
 }
 
-/*function removeNode() {
-  const myDiv = document.getElementById("productId");
-  const parent = myDiv.parentNode;
-  parent.removeChild(myDiv);
-}*/
-
 document.addEventListener("submit", addProductObject);
 
 function removeProduct(id) {
@@ -89,5 +71,4 @@ function updateProductView() {
   products.forEach((product) => {
     productSection.insertAdjacentHTML("beforeend", createProductHTML(product));
   });
-  //create HTML*
 }
