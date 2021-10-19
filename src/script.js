@@ -12,7 +12,7 @@ let form = document.getElementById("form");
 let productPlaceHolder = document.getElementById("productResult");
 
 let products = [];
-let prices = [];
+let totalPrice = 0;
 
 const addProductObject = (ev) => {
   ev.preventDefault();
@@ -24,13 +24,8 @@ const addProductObject = (ev) => {
     id: createUUID(),
   };
   products.push(productObj);
-  prices.push(productObj.price);
-  let priceSum = prices.reduce((total, product) => {
-    return parseFloat(total) + parseFloat(product);
-  });
-  document.querySelector("form").reset();
-  total.innerHTML = priceSum;
-  updateProductView();
+  totalPrice += parseFloat(productObj.price);
+  rerender();
 };
 
 const createProductHTML = (product) => {
@@ -59,16 +54,33 @@ document.addEventListener("submit", addProductObject);
 
 function removeProduct(id) {
   //remove product from product array
+  const product = products.find((product) => product.id === id);
+
+  if (!product) {
+    // did not find product with given id
+    return;
+  }
+
+  totalPrice -= product.price;
   products = products.filter((product) => product.id !== id);
+  rerender();
+}
+
+function rerender() {
+  document.querySelector("form").reset();
+  updateTotal();
   updateProductView();
 }
 
 function updateProductView() {
-  //update total
   //remove children from results section
   productSection.innerHTML = "";
   //add products back to results section
   products.forEach((product) => {
     productSection.insertAdjacentHTML("beforeend", createProductHTML(product));
   });
+}
+
+function updateTotal() {
+  total.innerHTML = totalPrice;
 }
